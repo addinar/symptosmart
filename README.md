@@ -23,6 +23,6 @@ SymptoSmart leverages the power of Machine Learning, specifically Random Forest 
 Contributions to SymptoSmart are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue on GitHub or submit a pull request.
 
 ## Acknowledgments
-- This project is made possible with the {insert datasets}.
+- This project is made possible with the {insert datasets} provided by contributers in Hugging Face.
 - Special thanks to the developers and contributors of Streamlit, Pandas, Scikit-learn, and other dependencies used in this project.
 - We'd also like to acknowledge the support and resources provided by OpenAI for enabling us to incorporate AI capabilities into SymptoSmart.
