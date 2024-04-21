@@ -1,1 +1,1 @@
-sk-proj-oQkQgPZaplHIbWKQEgFkT3BlbkFJyGoopxLeLYKQwmi2vX7d
+This is where you put your openai API key
