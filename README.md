@@ -1,6 +1,6 @@
 ## Description
 
-Symptosmart is a tool built for instant symptom analysis, triage, and personalized recommendations. 
+SymptoSmart is a tool built for instant symptom analysis, triage, and personalized recommendations. 
 With Symptosmart, users can input their symptoms, and the system provides instant feedback, categorizing 
 the severity of the condition and offering tailored recommendations based on the input.
 
