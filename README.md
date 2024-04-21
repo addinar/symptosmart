@@ -2,7 +2,7 @@
 
 ## Description
 
-SymptoSmart is a tool built for instant symptom analysis, triage, and personalized recommendations. With SymptoSmart, users can input their symptoms, and the system provides instant feedback, categorizing the severity of the condition and offering tailored recommendations based on the input.
+SymptoSmart is a tool built for instant symptom analysis, triage, and medical recommendations. With SymptoSmart, users can input their symptoms, and the system provides instant feedback, categorizing the severity of the condition and offering tailored recommendations based on the input.
 
 ## Packages and Libraries
 - **Streamlit:** A Python library that allows you to create web applications for machine learning and data science projects.
