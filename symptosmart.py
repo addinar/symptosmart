@@ -5,7 +5,6 @@ import streamlit as st
 import numpy as np
 import os
 from openai import OpenAI
-# from nlp import find_similar_words
 
 class Symptosmart:
     def __init__(self, file_1, file_2):
