@@ -4,7 +4,7 @@ from symptosmart import Symptosmart
 file_1, file_2 = 'dm1', 'dm2'
 symptosmart = Symptosmart(file_1, file_2)
 st.image('images/logo.jpg', width=200)
-st.caption("Instant symptom analysis, triage, and personalized recommendations at home.")
+st.caption("Instant symptom analysis, triage, and healthcare recommendations at home.")
 start = st.container()
 start.header("How are you feeling?")
 user_input = start.text_input(label="e.g. 'high fever'", placeholder='Start by entering a symptom')
