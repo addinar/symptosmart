@@ -4,6 +4,19 @@
 
 SymptoSmart is a tool built for instant symptom analysis, triage, and medical recommendations. With SymptoSmart, users can input their symptoms, and the system provides instant feedback, categorizing the severity of the condition and offering tailored recommendations based on the input.
 
+## Running the App
+Make sure you have Python 3.11 installed. If not:
+```
+brew install python@3.11
+```
+Then execute the following commands:
+```
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run main.py
+```
+
 ## Packages and Libraries
 - **Streamlit:** A Python library that allows you to create web applications for machine learning and data science projects.
 - **Pickle:** A module used for serializing and deserializing Python objects.
