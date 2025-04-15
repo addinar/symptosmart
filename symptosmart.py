@@ -4,7 +4,6 @@ import time
 import streamlit as st
 import numpy as np
 from openai import OpenAI
-from sentence_transformers import SentenceTransformer, util
 
 class Symptosmart:
     def __init__(self, file_1, file_2, key=None):
