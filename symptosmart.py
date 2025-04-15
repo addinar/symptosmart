@@ -3,14 +3,13 @@ import pandas as pd
 import time
 import streamlit as st
 import numpy as np
-import os
 from openai import OpenAI
 
 class Symptosmart:
-    def __init__(self, file_1, file_2):
+    def __init__(self, file_1, file_2, key=None):
         self.file_1 = file_1
         self.file_2 = file_2
-        self.openai_key = self.get_key()
+        self.openai_key = key
         self.load_pickles()
         self.diagnose_me = False
         self.urgent = False
@@ -77,7 +76,7 @@ class Symptosmart:
               pop1 = st.expander("Do I have this disease?")
               pop1.caption("If you experienced these other symptoms, it is likely you have this issue.")
               pop2 = st.expander("What are my next steps if I have this disease?")
-              prompt = f"List the symptoms and causes {diagnosis}."
+              prompt = f"List the symptoms and causes of {diagnosis}."
               def stream_response():
                   explanation = str(self.generate_ai(prompt))
                   for word in explanation.split(" "):
@@ -128,9 +127,11 @@ class Symptosmart:
             st.write_stream(stream_response)
             
     def generate_ai(self, prompt):
-        os.environ["OPENAI_API_KEY"] = self.openai_key
+        if not self.openai_key:
+            response = "You need to input your OpenAI API Key first to get accurate triaging and full diagnoses."
+            return response
         client = OpenAI(
-            api_key=os.environ.get("OPENAI_API_KEY"),
+            api_key=self.openai_key,
         )
         chat_completion = client.chat.completions.create(
             messages=[
@@ -143,4 +144,3 @@ class Symptosmart:
         )
         response = chat_completion.choices[0].message.content
         return response
-      

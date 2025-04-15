@@ -2,7 +2,8 @@ import streamlit as st
 from symptosmart import Symptosmart
 
 file_1, file_2 = 'dm1', 'dm2'
-symptosmart = Symptosmart(file_1, file_2)
+key = st.sidebar.text_input(label='Enter OpenAI API Key.')
+symptosmart = Symptosmart(file_1, file_2, key)
 st.image('images/logo.jpg', width=200)
 st.caption("Instant symptom analysis, triage, and healthcare recommendations at home.")
 start = st.container()
