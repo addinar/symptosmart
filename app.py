@@ -7,17 +7,17 @@ symptosmart = Symptosmart(file_1, file_2, key)
 st.image('images/logo.jpg', width=200)
 st.caption("Instant symptom analysis, triage, and healthcare recommendations at home.")
 start = st.container()
-start.header("How are you feeling?")
-user_input = start.text_input(label="e.g. 'high fever'", placeholder='Start by entering a symptom')
+start.header("How are you feeling? Select symptoms you've experienced.")
+# user_input = start.text_input(label="e.g. 'high fever'", placeholder='Start by entering a symptom')
+with start:
+    symptoms = symptosmart.multiselect()
+    diagnose_me = st.button('Diagnose me!')
 
-if user_input:
-    symptosmart.search_filtering(user_input)
-
-if symptosmart.diagnose_me:
+if diagnose_me:
     symptosmart.triage()
     if symptosmart.urgent:
         st.subheader("Your condition may be urgent.")
-        symptosmart.diagnose()
+        symptosmart.diagnose(symptoms)
     else:
         st.subheader("Your condition is most likely not urgent.")
         symptosmart.non_urgent_suggestions()

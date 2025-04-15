@@ -4,13 +4,17 @@ import time
 import streamlit as st
 import numpy as np
 from openai import OpenAI
+from sentence_transformers import SentenceTransformer, util
 
 class Symptosmart:
     def __init__(self, file_1, file_2, key=None):
         self.file_1 = file_1
         self.file_2 = file_2
         self.openai_key = key
+        self.user_input = None
         self.load_pickles()
+        self.symptoms = self.get_symptoms()
+        # self.similarity_model = SentenceTransformer('all-MiniLM-L6-v2')
         self.diagnose_me = False
         self.urgent = False
 
@@ -26,39 +30,70 @@ class Symptosmart:
         with open(f'models/{file_2}/{file_2}.pkl', 'rb') as f:
             model = pickle.load(f)
         self.model_2 = model
+    
+    @st.cache_resource
+    def load_similarity_model():
+        return SentenceTransformer('all-MiniLM-L6-v2')
 
-    def search_filtering(self, user_input):
-        self.user_input = user_input
+    def get_symptoms(self):
+        df = self.df['symptoms_preprocessed']
+        all_symptoms = set()
+        for _, symptoms in df.items():
+            symptoms_list = symptoms.split(',')
+            all_symptoms.update(symptoms_list)
+        self.remove_elements(all_symptoms)
+        return all_symptoms
+
+    def search_filtering(self):
+        # self.user_input = user_input
+        '''
+        similarity_model = self.load_similarity_model()
+        symptom_embeddings = similarity_model.encode(self.symptoms)
+        input_embeddings = similarity_model.encode(self.user_input)
         with st.spinner('Symptoms loading...'):
             time.sleep(2)
-        df = self.df
+        '''
+        df = self.df['symptoms_preprocessed']
         try:
-            filtered_df = df[self.preprocessed.str.contains(user_input, case=False)]
-            filtered_df = filtered_df['symptoms_preprocessed']
-            all_symptoms = []
-            for _, symptoms in filtered_df.items():
-                symptoms_list = symptoms.split(',')
-                all_symptoms.extend(symptoms_list)
-            all_symptoms = list(set(all_symptoms))
-            self.remove_elements(all_symptoms)
-            self.multiselect(all_symptoms)
+            #filtered_df = df[self.preprocessed.str.contains(user_input, case=False)]
+            #df = df['symptoms_preprocessed']
+            # all_symptoms = set()
+            # for _, symptoms in df.items():
+            #     symptoms_list = symptoms.split(',')
+            #     all_symptoms.update(symptoms_list)
+            # self.remove_elements(all_symptoms)
+            # cosine_scores = util.cos_sim(input_embedding, symptom_embeddings)
+            # max_score_i = cosine_scores.argmax()
+            # similar_search = self.symptoms[max_score_i]
+            # print(similar_search)
+            # filtered_df = df[self.preprocessed.str.contains(similar_search, case=False)]
+            # df = filtered_df['symptoms_preprocessed']
+            # all_symptoms = set()
+            # for _, symptoms in df.items():
+            #     symptoms_list = symptoms.split(',')
+            #     all_symptoms.update(symptoms_list)
+            # self.remove_elements(all_symptoms)
+            self.multiselect(self.symptoms)
             self.diagnose_me = st.button('Diagnose me!')
-        except:
+        except Exception as e:
             st.error("Error: Hmmm... looks like we couldn't find any symptoms matching your input. Try inputting something similar or more specific. e.g. instead of 'cold', try 'chills'.")
+            print(e)
 
-    def multiselect(self, symptoms):
+    def multiselect(self):
         self.selected = []
-        self.selected = st.multiselect('Did you experience any of these other symptoms?', symptoms)
+        self.selected = st.multiselect('Did you experience any of these symptoms?', self.symptoms)
         self.selected.append(self.user_input) 
-        
+        selected = [str(s) for s in self.selected if s is not None]
+        return selected
 
-    def diagnose(self):
+    def diagnose(self, symptoms):
         st.write("Here are possible diagnoses along with their treatments:")
         with st.spinner('Retrieving your diagnosis...'):
           time.sleep(2)
         models = [self.model_1, self.model_2]
         self.diagnoses = []
-        selected_symptoms_tfidf = self.vectorizer.transform(self.selected)
+        symptoms_text = [','.join(str(s) for s in symptoms if s is not None)]
+        selected_symptoms_tfidf = self.vectorizer.transform(symptoms_text)
         selected_symptoms_reduced = self.svd.transform(selected_symptoms_tfidf)
         for model in models:
             prediction = model.predict(selected_symptoms_reduced)
@@ -93,7 +128,8 @@ class Symptosmart:
               
         
     def remove_elements(self, list):
-        list.remove(self.user_input)
+        if self.user_input:
+            list.remove(self.user_input)
         if 'family history' in list:
           list.remove('family history')
         if 'coma' in list:
